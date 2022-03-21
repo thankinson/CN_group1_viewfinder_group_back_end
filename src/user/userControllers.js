@@ -73,7 +73,7 @@ exports.deleteMovie = async (req, res) => {
             [req.params.filterKey]: req.params.filterVal,
         });
         if (deleteMovie.deletedCount > 0) {
-            res.status(200).send({msg: "Successfully removed Removep"});
+            res.status(200).send({msg: "Successfully removed movie"});
         } else {
             throw new Error("Did not remove user");
         };
