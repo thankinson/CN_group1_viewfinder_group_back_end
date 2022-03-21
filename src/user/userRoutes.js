@@ -8,6 +8,7 @@ const {
     updateWatchlist,
 } = require("./userControllers");
 const { hashPass, checkToken } = require("../middleware");
+const userRouter = Router();
 
 //User creation, login, updating, and deletion
 userRouter.post("/user", hashPass, addUser);
