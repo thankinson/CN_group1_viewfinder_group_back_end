@@ -5,7 +5,7 @@ const userRouter = require("./user/userRoutes");
 const app = express();
 const port = 5000;
 
-app.use(express.json);
+app.use(express.json());
 app.use(cors());
 app.use(userRouter);
 
