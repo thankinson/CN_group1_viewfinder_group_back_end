@@ -16,7 +16,7 @@ exports.hashPass = async (req, res, next) => {
 exports.decryptPass = async (req, res, next) => {
   try {
     req.user = await User.findOne({ username: req.body.username });
-    if (await brcypt.compare(req.body.pass, req.user.pass)) {
+    if (await bcrypt.compare(req.body.pass, req.user.pass)) {
       next();
     } else {
       throw new Error("Incorrect username / password");
