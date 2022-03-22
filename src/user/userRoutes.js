@@ -4,8 +4,9 @@ const {
     login,
     updateUser,
     deleteUser,
-    getWatchlist,
-    updateWatchlist,
+    // getWatchlist,
+    addMovie,
+    deleteMovie
 } = require("./userControllers");
 const { hashPass, checkToken } = require("../middleware");
 const userRouter = Router();
@@ -17,7 +18,8 @@ userRouter.patch("/user", updateUser);
 userRouter.delete("/user/:filterKey/:filterVal", deleteUser);
 
 //Watchlist addition and deletion
-userRouter.get("/watchlist", getWatchlist);
-userRouter.patch("/watchlist", updateWatchlist);
+// userRouter.get("/watchlist", getWatchlist);
+userRouter.put("/watchlist", addMovie);
+userRouter.patch("/watchlist", deleteMovie)
 
 module.exports = userRouter;

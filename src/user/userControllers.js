@@ -5,7 +5,7 @@ exports.addUser = async (req, res) =>{
     try {
         const newUser = await User.create(req.body);
         const token = await jwt.sign({_id: newUser._id}, process.env.SECRET);
-        res.status(200).send({User: newUser.usermae, token});
+        res.status(200).send({User: newUser.username, token});
     } catch (error) {
         console.log(error)
         res.status(500).send({err: error.message});
@@ -15,10 +15,10 @@ exports.addUser = async (req, res) =>{
 exports.login = async (req, res) => {
     try {
         const token = await jwt.sign({_id: req.user._id}, process.env.SECRET);
-        res.status(200).send({err: error.message});
+        res.status(200).send({user: req.user.username, token});
     } catch (error) {
         console.log(error);
-        
+        res.status(500).send({err: error.message})
     }
 };
 
@@ -29,13 +29,13 @@ exports.updateUser = async (req, res) => {
             { pass: req.body.pass }
         );
         if (update.matchedCount){
-            res.status(200).send({msg: "Update Succesfull"});
+            res.status(200).send({msg: "Update Succesful"});
         } else {
             throw new Error("Did not Update");
         }
     } catch (error) {
         console.log(error);
-        res.status(500);
+        res.status(500).send({err: error.message})
     } 
 };
 
@@ -50,7 +50,8 @@ exports.deleteUser = async (req, res) => {
             throw new Error("Did not remove user");
         };
     } catch (error) {
-        console.log( {error: error.message} );
+        console.log( error );
+        res.status(500).send({err: error.message})
     };
 };
 
@@ -79,5 +80,6 @@ exports.deleteMovie = async (req, res) => {
         };
     } catch (error) {
         console.log( {error: error.message} );
+        res.status(500).send({err: error.message})
     };
 };
