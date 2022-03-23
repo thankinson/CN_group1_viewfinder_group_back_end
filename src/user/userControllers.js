@@ -1,24 +1,24 @@
 const jwt = require("jsonwebtoken");
 const User = require("./userModel");
 
-exports.addUser = async (req, res) =>{
+exports.addUser = async (req, res) => {
     try {
         const newUser = await User.create(req.body);
-        const token = await jwt.sign({_id: newUser._id}, process.env.SECRET);
-        res.status(200).send({User: newUser.username, token});
+        const token = await jwt.sign({ _id: newUser._id }, process.env.SECRET);
+        res.status(200).send({ User: newUser.username, token });
     } catch (error) {
-        console.log(error)
-        res.status(500).send({err: error.message});
+        console.log(error);
+        res.status(500).send({ err: error.message });
     }
 };
 
 exports.login = async (req, res) => {
     try {
-        const token = await jwt.sign({_id: req.user._id}, process.env.SECRET);
-        res.status(200).send({user: req.user.username, token});
+        const token = await jwt.sign({ _id: req.user._id }, process.env.SECRET);
+        res.status(200).send({ user: req.user.username, token });
     } catch (error) {
         console.log(error);
-        res.status(500).send({err: error.message})
+        res.status(500).send({ err: error.message });
     }
 };
 
@@ -28,15 +28,15 @@ exports.updateUser = async (req, res) => {
             { username: req.user.username },
             { pass: req.body.pass }
         );
-        if (update.matchedCount){
-            res.status(200).send({msg: "Update Succesful"});
+        if (update.matchedCount) {
+            res.status(200).send({ msg: "Update Succesful" });
         } else {
             throw new Error("Did not Update");
         }
     } catch (error) {
         console.log(error);
-        res.status(500).send({err: error.message})
-    } 
+        res.status(500).send({ err: error.message });
+    }
 };
 
 exports.deleteUser = async (req, res) => {
@@ -45,41 +45,76 @@ exports.deleteUser = async (req, res) => {
             [req.params.filterKey]: req.params.filterVal,
         });
         if (deleteUser.deletedCount > 0) {
-            res.status(200).send({msg: "Successfully removed User"});
+            res.status(200).send({ msg: "Successfully removed User" });
         } else {
             throw new Error("Did not remove user");
-        };
+        }
     } catch (error) {
-        console.log( error );
-        res.status(500).send({err: error.message})
-    };
-};
-
-exports.addMovie = async (req, res) =>{
-    try {
-        const newMovie = await User.updateOne(
-            { [req.body.filterKey]: req.body.filterVal },
-            { [req.body.updateKey]: req.body.updateVal } 
-            );
-        res.status(200).send({watchlist: newMovie.watchlist});
-    } catch (error) {
-        console.log(error)
-        res.status(500).send({err: error.message});
+        console.log(error);
+        res.status(500).send({ err: error.message });
     }
 };
 
-exports.deleteMovie = async (req, res) => {
+exports.listFilms = async (req, res) => {
     try {
-        const deleteMovie = await User.deleteOne({
-            [req.params.filterKey]: req.params.filterVal,
+        const returnedUser = await User.findOne({
+            username: req.body.username,
         });
-        if (deleteMovie.deletedCount > 0) {
-            res.status(200).send({msg: "Successfully removed movie"});
-        } else {
-            throw new Error("Did not remove user");
-        };
+        console.log(returnedUser.watchlist);
+        res.status(200).send(returnedUser.watchlist);
     } catch (error) {
-        console.log( {error: error.message} );
-        res.status(500).send({err: error.message})
-    };
+        console.log(error);
+        res.status(500).send({ err: error.message });
+    }
+};
+
+exports.addFilm = async (req, res) => {
+    try {
+        const newFilm = req.body.newfilm;
+        console.log(newFilm);
+        const foundUser = await User.findOne({ username: req.body.username });
+        console.log(foundUser);
+        const updatedList = await User.updateOne(
+            {
+                _id: foundUser.id,
+            },
+            { $addToSet: { watchlist: newFilm } }
+        );
+        res.status(200).send(updatedList);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ err: error.message });
+    }
+};
+
+exports.removeFilm = async (req, res) => {
+    try {
+        const removeFilm = req.body.removefilm;
+        console.log(removeFilm);
+        const foundUser = await User.findOne({ username: req.body.username });
+        console.log(foundUser);
+        const updatedList = await User.updateOne(
+            {
+                _id: foundUser.id,
+            },
+            { $pull: { watchlist: removeFilm } }
+        );
+        res.status(200).send(updatedList);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ err: error.message });
+    }
+};
+
+//Test functionality
+
+exports.getUserTest = async (req, res) => {
+    try {
+        const foundUser = await User.findOne({ username: req.body.username });
+        console.log(foundUser);
+        res.status(200).send(foundUser);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ err: error.message });
+    }
 };
