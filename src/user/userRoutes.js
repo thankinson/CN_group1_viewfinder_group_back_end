@@ -9,7 +9,7 @@ const {
     removeFilm,
     getUserTest,
 } = require("./userControllers");
-const { hashPass, checkToken } = require("../middleware");
+const { hashPass, checkToken, decryptPass } = require("../middleware");
 const userRouter = Router();
 
 //User creation
