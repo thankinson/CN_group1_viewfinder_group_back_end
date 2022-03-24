@@ -58,7 +58,7 @@ exports.deleteUser = async (req, res) => {
 exports.listFilms = async (req, res) => {
     try {
         const returnedUser = await User.findOne({
-            username: req.body.username,
+            username: req.user.username,
         });
         console.log(returnedUser.watchlist);
         res.status(200).send(returnedUser.watchlist);

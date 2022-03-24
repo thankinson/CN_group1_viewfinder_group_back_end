@@ -19,7 +19,7 @@ userRouter.patch("/user", updateUser);
 userRouter.delete("/user/:filterKey/:filterVal", deleteUser);
 
 //Watchlist addition and deletion
-userRouter.get("/watchlist", listFilms);
+userRouter.get("/watchlist", checkToken, listFilms);
 userRouter.put("/watchlist", addFilm);
 userRouter.patch("/watchlist", removeFilm);
 
