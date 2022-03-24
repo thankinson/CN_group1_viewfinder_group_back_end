@@ -12,8 +12,11 @@ const {
 const { hashPass, checkToken } = require("../middleware");
 const userRouter = Router();
 
-//User creation, login, updating, and deletion
-userRouter.post("/user", hashPass, addUser);
+//User creation
+userRouter.post("/create", hashPass, addUser);
+
+//User login, updating, and deletion
+userRouter.post("/user", decryptPass, login);
 userRouter.get("/user", checkToken, login);
 userRouter.patch("/user", updateUser);
 userRouter.delete("/user/:filterKey/:filterVal", deleteUser);
