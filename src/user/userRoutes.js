@@ -1,13 +1,13 @@
 const { Router } = require("express");
 const {
-    addUser,
-    login,
-    updateUser,
-    deleteUser,
-    listFilms,
-    addFilm,
-    removeFilm,
-    getUserTest,
+  addUser,
+  login,
+  updateUser,
+  deleteUser,
+  listFilms,
+  addFilm,
+  removeFilm,
+  getUserTest,
 } = require("./userControllers");
 const { hashPass, checkToken, decryptPass } = require("../middleware");
 const userRouter = Router();
@@ -18,7 +18,7 @@ userRouter.post("/create", hashPass, addUser);
 //User login, updating, and deletion
 userRouter.post("/user", decryptPass, login);
 userRouter.get("/user", checkToken, login);
-userRouter.patch("/user", updateUser);
+userRouter.patch("/user", checkToken, hashPass, updateUser);
 userRouter.delete("/user/:filterKey/:filterVal", deleteUser);
 
 //Watchlist addition and deletion
