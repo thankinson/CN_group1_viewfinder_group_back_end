@@ -55,13 +55,11 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-// userRouter.get("/watchlist", checkToken, listFilms);
 exports.listFilms = async (req, res) => {
   try {
     const returnedUser = await User.findOne({
       username: req.user.username,
     });
-    console.log("watchlist=", returnedUser.watchlist);
     res.status(200).send(returnedUser.watchlist);
   } catch (error) {
     console.log(error);
@@ -71,11 +69,8 @@ exports.listFilms = async (req, res) => {
 
 exports.addFilm = async (req, res) => {
   try {
-    console.log(req.body);
     const newFilm = req.body.newFilm;
-    console.log(newFilm);
     const foundUser = await User.findOne({ username: req.body.username });
-    console.log(foundUser);
     const updatedList = await User.updateOne(
       {
         _id: foundUser.id,
@@ -91,11 +86,8 @@ exports.addFilm = async (req, res) => {
 
 exports.removeFilm = async (req, res) => {
   try {
-    console.log("userController- removeFilm");
     const removeFilm = req.body.removefilm;
-    console.log(removeFilm);
     const foundUser = await User.findOne({ username: req.body.username });
-    console.log(foundUser);
     const updatedList = await User.updateOne(
       {
         _id: foundUser.id,
@@ -114,7 +106,6 @@ exports.removeFilm = async (req, res) => {
 exports.getUserTest = async (req, res) => {
   try {
     const foundUser = await User.findOne({ username: req.body.username });
-    console.log(foundUser);
     res.status(200).send(foundUser);
   } catch (error) {
     console.log(error);
